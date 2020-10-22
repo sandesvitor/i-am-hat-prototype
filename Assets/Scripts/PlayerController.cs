@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _hat;
     [SerializeField] private GameObject _gravityGun;
     private NavMeshAgent _navMeshAgent;
+    private LayerMask _groundLayerMask;
 
     void Start()
     {
@@ -17,6 +18,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.LogError("NavMeshAgent component is not attached to " + gameObject.name);
         }
+
+        _groundLayerMask = LayerMask.GetMask("WalkableGround");
     }
 
     void Update()
@@ -32,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
-            if (Physics.Raycast(ray, out hit, 100))
+            if (Physics.Raycast(ray, out hit, 100, _groundLayerMask))
             {
                 _navMeshAgent.destination = hit.point;
             }
