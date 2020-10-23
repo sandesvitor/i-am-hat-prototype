@@ -17,12 +17,12 @@ public class GravityGunController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && Time.time > _canFire)
-        {
-            FireGravityLaser();
-        }
+        //if (Input.GetKeyDown(KeyCode.E) && Time.time > _canFire)
+        //{
+        //    FireGravityLaser();
+        //}
 
-        RotateY();
+        //RotateY();
     }
 
     private void GimmeToPlayer(Transform player)

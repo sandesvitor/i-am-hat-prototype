@@ -63,10 +63,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GravityController.cs" />
+    <Compile Include="Assets\Scripts\GemeManager\GameManager.cs" />
     <Compile Include="Assets\Scripts\GravityGunController.cs" />
     <Compile Include="Assets\Scripts\GravityLaser.cs" />
     <Compile Include="Assets\Scripts\HatController.cs" />
+    <Compile Include="Assets\Scripts\ObjectsController.cs" />
     <Compile Include="Assets\Scripts\Observer Subject\GameEvents.cs" />
     <Compile Include="Assets\Scripts\OutlineObjects.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />

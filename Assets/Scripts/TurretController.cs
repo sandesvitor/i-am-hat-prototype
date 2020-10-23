@@ -4,21 +4,42 @@ using UnityEngine;
 
 public class TurretController : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private Transform _turretHead;
     [SerializeField] private Transform _player;
-    private bool _playerInSight = false;
+    [SerializeField] private Transform _firePosition;
+
+    [Header("Variables")]
     [SerializeField] private float _turn_speed = 45f;
+    [SerializeField] private float range = 15f;
+
+
+    private LineRenderer _lineRenderer;
+    private bool _playerInSight = false;
+
+    private void Start()
+    {
+        // currently on the Laser_Barrel Game Object
+        _lineRenderer = this.GetComponentInChildren<LineRenderer>();
+    }
 
     void Update()
     {
         if (_playerInSight)
         {
             Vector3 playerPos = _player.position;
-            rotateTowards(playerPos);
+            RotateTowards(playerPos);
+            Laser(playerPos);
+        } else
+        {
+            if (_lineRenderer.enabled)
+            {
+                _lineRenderer.enabled = false;
+            }
         }
     }
 
-    protected void rotateTowards(Vector3 to)
+    protected void RotateTowards(Vector3 to)
     {
 
         Quaternion _lookRotation =
@@ -37,7 +58,6 @@ public class TurretController : MonoBehaviour
         if(other.tag == "Player")
         {
             _playerInSight = true;
-            Debug.Log("Hello Player!");
         }
     }
 
@@ -46,7 +66,40 @@ public class TurretController : MonoBehaviour
         if (other.tag == "Player")
         {
             _playerInSight = false;
-            Debug.Log("Bye Player...");
+        }
+    }
+
+    private void Laser(Vector3 position)
+    {
+        if (!_lineRenderer.enabled)
+        {
+            _lineRenderer.enabled = true;
+        }
+
+        RaycastHit hit;
+        if (Physics.Raycast(
+            _firePosition.transform.TransformPoint(Vector3.zero),
+            _firePosition.transform.TransformDirection(Vector3.up), 
+            out hit))
+        {
+            if (hit.collider)
+            {
+                Debug.Log(hit.transform.gameObject.name);
+                
+                _lineRenderer.SetPosition(0, _firePosition.position);
+                _lineRenderer.SetPosition(1, hit.point);
+
+                if (hit.collider.gameObject == _player.gameObject)
+                {
+                    GameManager.GameOver();
+                }
+
+                //Debug.DrawRay(
+                //    _firePosition.transform.TransformPoint(Vector3.zero),
+                //    _firePosition.transform.TransformDirection(Vector3.up),
+                //    Color.green);
+            }
         }
     }
 }
+

@@ -7,41 +7,34 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform _hat;
     [SerializeField] private GameObject _gravityGun;
-    private NavMeshAgent _navMeshAgent;
-    private LayerMask _groundLayerMask;
+    [SerializeField] private float _speed = 5f;
+    private Rigidbody _rb;
+   
 
     void Start()
     {
-        _navMeshAgent = this.GetComponent<NavMeshAgent>();
+        _rb = this.GetComponent<Rigidbody>();
 
-        if (_navMeshAgent == null)
+        if (_rb == null)
         {
-            Debug.LogError("NavMeshAgent component is not attached to " + gameObject.name);
+            Debug.LogError("RigidBody component is not attached to " + gameObject.name);
         }
 
-        _groundLayerMask = LayerMask.GetMask("WalkableGround");
+        _rb.useGravity = true;
+
+    }
+
+    private void FixedUpdate()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        Vector3 move = new Vector3(horizontal, 0f, vertical);
+
+        _rb.AddForce(move * _speed);
     }
 
     void Update()
     {
-        MouseClickMovement();
-    }
-
-    private void MouseClickMovement()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        RaycastHit hit;
-
-        if (Input.GetMouseButton(1))
-        {
-            if (Physics.Raycast(ray, out hit, 100, _groundLayerMask))
-            {
-                _navMeshAgent.destination = hit.point;
-            }
-        }
-
-        Vector3 forward = transform.TransformDirection(Vector3.forward) * 5;
-        Debug.DrawRay(transform.position, forward, Color.green);
     }
 }
